@@ -2,6 +2,8 @@
 
 This folder demonstrates how to create and enforce organization-specific standards on top of the FINOS CALM specification.
 
+Read [this](./architecture-validate-process.md) for more details on the validation process.
+
 ## Contents
 
 ### `the-company.standard.json`

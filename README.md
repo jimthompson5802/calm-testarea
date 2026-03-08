@@ -36,11 +36,12 @@ Generated Docusaurus documentation sites that visualize the architectures as sta
 GitHub Copilot chat logs documenting pattern creation, refinement, and summarization sessions showing the iterative design process.
 
 ### Architecture Validation (`architecture-validation/`)
-Experimental and test files:
-- `the-company.standard.json`: Company-specific standards
-- `my-app-standard-compliant.architecture.json`: Compliant test architecture
-- `my-app-non-standard-compliant.architecture.json`: Non-compliant test architecture
-- `the-company.pattern.json`: Company validation pattern
+Demonstrates how to create and enforce organization-specific standards on top of FINOS CALM:
+- `the-company.standard.json`: Company-specific JSON Schema standard extending CALM nodes
+- `the-company.pattern.json`: Pattern that enforces the company standard
+- `my-app-standard-compliant.architecture.json`: Example compliant architecture
+- `my-app-non-standard-compliant.architecture.json`: Example non-compliant architecture
+- `architecture-validate-process.md`: Detailed explanation of the validation process and how the three files connect
 
 ## Key Concepts
 

@@ -50,11 +50,36 @@ Organizations can use this approach to enforce governance, compliance, and opera
 calm validate --architecture my-app-standard-compliant.architecture.json --pattern the-company.pattern.json -f pretty
 ```
 
+```text
+(node:23144) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+info [calm-validate]:     Formatting output as pretty
+Summary
+- Errors: no (0)
+- Warnings: no (0)
+- Info/Hints: 0
+
+No issues found.
+```
+
 ### 2. Architecture file is local, pattern file is in GitHub
 ```bash
 calm validate --architecture my-app-standard-compliant.architecture.json \
   --pattern https://raw.githubusercontent.com/jimthompson5802/calm-testarea/refs/heads/main/architecture-validation/the-company.pattern.json \
   -f pretty
+```
+
+```text
+(node:23822) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+info [file-system-document-loader]:     my-app-standard-compliant.architecture.json exists, loading as file...
+info [calm-validate]:     Formatting output as pretty
+Summary
+- Errors: no (0)
+- Warnings: no (0)
+- Info/Hints: 0
+
+No issues found.
 ```
 
 ### 3. Both architecture and pattern files are in GitHub
@@ -64,7 +89,40 @@ calm validate --architecture https://raw.githubusercontent.com/jimthompson5802/c
   -f pretty
 ```
 
+```text
+(node:24995) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+info [calm-validate]:     Formatting output as pretty
+Summary
+- Errors: no (0)
+- Warnings: no (0)
+- Info/Hints: 0
+
+No issues found.
+```
+
 ### 4. Validate non-compliant architecture (demonstrates validation failures)
 ```bash
 calm validate --architecture my-app-non-standard-compliant.architecture.json --pattern the-company.pattern.json -f pretty
+```
+
+```
+ ERROR json-schema: must have required property 'owner'
+    path: /nodes/web-frontend/metadata
+    at line 19, col 19 (/Users/jim/Desktop/calm-demos/calm-testarea/architecture-validation/my-app-non-standard-compliant.architecture.json)
+    schema: #/allOf/1/properties/metadata/required
+    19 |       "metadata": {
+       |                   ^
+  ERROR json-schema: must match pattern "^CC-[0-9]{4}$"
+    path: /nodes/order-api/metadata/costCenter
+    at line 38, col 23 (/Users/jim/Desktop/calm-demos/calm-testarea/architecture-validation/my-app-non-standard-compliant.architecture.json)
+    schema: #/allOf/1/properties/metadata/properties/costCenter/pattern
+    38 |         "costCenter": "COST-2001",
+       |                       ^^^^^^^^^^^
+  ERROR json-schema: must be equal to one of the allowed values (expected one of ["development","staging","production"])
+    path: /nodes/order-db/metadata/environment
+    at line 51, col 24 (/Users/jim/Desktop/calm-demos/calm-testarea/architecture-validation/my-app-non-standard-compliant.architecture.json)
+    schema: #/allOf/1/properties/metadata/properties/environment/enum
+    51 |         "environment": "prod"
+       |                        ^^^^^^
 ```

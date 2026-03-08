@@ -37,9 +37,10 @@ GitHub Copilot chat logs documenting pattern creation, refinement, and summariza
 
 ### Architecture Validation (`architecture-validation/`)
 Experimental and test files:
-- `company.standard.json`: Company-specific standards
-- `my-app.architecture.json`: Test architecture
-- `my-pattern.pattern.json`: Test pattern
+- `the-company.standard.json`: Company-specific standards
+- `my-app-standard-compliant.architecture.json`: Compliant test architecture
+- `my-app-non-standard-compliant.architecture.json`: Non-compliant test architecture
+- `the-company.pattern.json`: Company validation pattern
 
 ## Key Concepts
 

@@ -34,3 +34,24 @@ This directory demonstrates:
 3. **Compliant Implementation**: How to create architectures that satisfy organizational requirements
 
 Organizations can use this approach to enforce governance, compliance, and operational requirements across all architecture definitions.
+
+## Example Runs
+
+### 1. Both architecture and pattern files are local
+```bash
+calm validate --architecture my-app.architecture.json --pattern my-pattern.pattern.json -f pretty
+```
+
+### 2. Architecture file is local, pattern file is in GitHub
+```bash
+calm validate --architecture my-app.architecture.json \
+  --pattern https://raw.githubusercontent.com/jimthompson5802/calm-testarea/refs/heads/main/architecture-validation/my-pattern.pattern.json \
+  -f pretty
+```
+
+### 3. Both architecture and pattern files are in GitHub
+```bash
+calm validate --architecture https://raw.githubusercontent.com/jimthompson5802/calm-testarea/refs/heads/main/architecture-validation/my-app.architecture.json \
+  --pattern https://raw.githubusercontent.com/jimthompson5802/calm-testarea/refs/heads/main/architecture-validation/my-pattern.pattern.json \
+  -f pretty
+```

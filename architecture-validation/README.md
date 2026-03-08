@@ -101,7 +101,75 @@ Summary
 No issues found.
 ```
 
-### 4. Validate non-compliant architecture (demonstrates validation failures)
+### 4. Validate using url-mapping
+
+Pattern file referencing a remote host that is not currently accessible
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/patterns/company-base-pattern.json",
+  "title": "Company Base Pattern",
+  "description": "Pattern that enforces the Company Node Standard on all nodes.",
+  "type": "object",
+  "properties": {
+    "nodes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/extended-node"
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "items": {
+        "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship"
+      }
+    }
+  },
+  "$defs": {
+    "extended-node": {
+      "allOf": [
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node"
+        },
+        {
+          "$ref": "https://example.com/standards/the-company.standard.json"
+        }
+      ]
+    }
+  }
+}
+```
+
+
+Url mapping file `url-mapping.json`
+
+```json
+{
+    "https://example.com/standards/the-company.standard.json":"the-company.standard.json"
+}
+```
+
+
+```bash
+calm validate --architecture my-app-standard-compliant.architecture.json --pattern the-company-url-mapping.pattern.json -f pretty -u url-mapping.json
+```
+
+```text
+(node:51336) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+info [calm-validate]:     Formatting output as pretty
+Summary
+- Errors: no (0)
+- Warnings: no (0)
+- Info/Hints: 0
+
+No issues found.
+```
+
+
+
+
+### 5. Validate non-compliant architecture (demonstrates validation failures)
 ```bash
 calm validate --architecture my-app-non-standard-compliant.architecture.json --pattern the-company.pattern.json -f pretty
 ```

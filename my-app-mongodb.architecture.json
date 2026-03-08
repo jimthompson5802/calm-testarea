@@ -1,0 +1,65 @@
+{
+  "nodes": [
+    {
+      "unique-id": "application-service",
+      "name": "Application Service",
+      "node-type": "service",
+      "description": "[[ DESCRIPTION ]]",
+      "interfaces": [
+        {
+          "unique-id": "app-api",
+          "host": "[[ HOST ]]",
+          "port": -1
+        }
+      ]
+    },
+    {
+      "unique-id": "mongodb-database",
+      "name": "MongoDB Database",
+      "node-type": "database",
+      "description": "MongoDB NoSQL database",
+      "interfaces": [
+        {
+          "unique-id": "mongodb-connection",
+          "host": "[[ HOST ]]",
+          "port": 27017
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "unique-id": "database-choice",
+      "description": "Which database should the application use?",
+      "relationship-type": {
+        "options": [
+          {
+            "description": "Use MongoDB",
+            "nodes": [
+              "mongodb-database"
+            ],
+            "relationships": [
+              "app-to-mongodb"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "unique-id": "app-to-mongodb",
+      "description": "Application connects to MongoDB database",
+      "protocol": "TCP",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "application-service"
+          },
+          "destination": {
+            "node": "mongodb-database"
+          }
+        }
+      }
+    }
+  ],
+  "$schema": "https://example.com/patterns/app-with-database.pattern.json"
+}

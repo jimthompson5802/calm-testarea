@@ -1,0 +1,61 @@
+{
+  "nodes": [
+    {
+      "unique-id": "my-service",
+      "name": "My Service",
+      "node-type": "service",
+      "description": "My Service",
+      "interfaces": [
+        {
+          "unique-id": "my-interface"
+        }
+      ]
+    },
+    {
+      "unique-id": "sqs-messaging-service",
+      "name": "AWS SQS Messaging Service",
+      "node-type": "service",
+      "description": "AWS SQS Messaging Service",
+      "interfaces": [
+        {
+          "unique-id": "sqs-interface",
+          "queue-url": "[[ QUEUE_URL ]]",
+          "region": "[[ REGION ]]"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "unique-id": "messaging-service-choice",
+      "description": "Which messaging service should be used?",
+      "relationship-type": {
+        "options": [
+          {
+            "description": "Use AWS SQS",
+            "nodes": [
+              "sqs-messaging-service"
+            ],
+            "relationships": [
+              "my-service-to-sqs"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "unique-id": "my-service-to-sqs",
+      "description": "My Service Using AWS SQS",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "my-service"
+          },
+          "destination": {
+            "node": "sqs-messaging-service"
+          }
+        }
+      }
+    }
+  ]
+}

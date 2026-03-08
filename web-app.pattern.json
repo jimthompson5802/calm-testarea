@@ -1,0 +1,95 @@
+{
+  "$schema": "https://calm.finos.org/release/1.2/meta/calm.json",
+  "$id": "https://example.com/patterns/web-app-pattern.json",
+  "title": "Web Application Pattern",
+  "description": "A reusable 3-tier web application pattern (frontend, API service, database).",
+  "type": "object",
+  "properties": {
+    "nodes": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "prefixItems": [
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "web-frontend" },
+            "node-type": { "const": "webclient" },
+            "name": { "const": "Web Frontend" },
+            "description": { "type": "string" },
+            "support-team": { "type": "string" },
+            "port": {"type": "integer"}
+          },
+          "required": ["description", "support-team", "port"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "api-service" },
+            "node-type": { "const": "service" },
+            "name": { "const": "API Service" },
+            "description": { "type": "string" }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "app-database" },
+            "node-type": { "const": "database" },
+            "name": { "const": "Application Database" },
+            "description": { "type": "string" }
+          },
+          "required": ["description"]
+        }
+      ]
+    },
+    "relationships": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "prefixItems": [
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "frontend-to-api" },
+            "description": { "type": "string" },
+            "protocol": { "const": "HTTPS" },
+            "relationship-type": {
+              "const": {
+                "connects": {
+                  "source": { "node": "web-frontend" },
+                  "destination": { "node": "api-service" }
+                }
+              }
+            }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "api-to-database" },
+            "description": { "type": "string" },
+            "protocol": { "const": "JDBC" },
+            "relationship-type": {
+              "const": {
+                "connects": {
+                  "source": { "node": "api-service" },
+                  "destination": { "node": "app-database" }
+                }
+              }
+            }
+          },
+          "required": ["description"]
+        }
+      ]
+    }
+  },
+  "required": ["nodes", "relationships"]
+}

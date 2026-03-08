@@ -1,0 +1,62 @@
+{
+  "nodes": [
+    {
+      "unique-id": "my-service",
+      "name": "My Service",
+      "node-type": "service",
+      "description": "My Service",
+      "interfaces": [
+        {
+          "unique-id": "my-interface"
+        }
+      ]
+    },
+    {
+      "unique-id": "rabbitmq-messaging-service",
+      "name": "Messaging Service",
+      "node-type": "service",
+      "description": "RabbitMQ Messaging Service",
+      "interfaces": [
+        {
+          "unique-id": "rabbitmq-interface",
+          "host": "[[ HOST ]]",
+          "port": "[[ PORT ]]",
+          "virtual-host": "[[ VIRTUAL_HOST ]]"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "unique-id": "messaging-service-choice",
+      "description": "Which messaging service should be used?",
+      "relationship-type": {
+        "options": [
+          {
+            "description": "Use RabbitMQ",
+            "nodes": [
+              "rabbitmq-messaging-service"
+            ],
+            "relationships": [
+              "my-service-to-rabbitmq"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "unique-id": "my-service-to-rabbitmq",
+      "description": "My Service Using RabbitMQ",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "my-service"
+          },
+          "destination": {
+            "node": "rabbitmq-messaging-service"
+          }
+        }
+      }
+    }
+  ]
+}

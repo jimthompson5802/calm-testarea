@@ -1,0 +1,61 @@
+{
+  "nodes": [
+    {
+      "unique-id": "my-service",
+      "name": "My Service",
+      "node-type": "service",
+      "description": "My Service",
+      "interfaces": [
+        {
+          "unique-id": "my-interface"
+        }
+      ]
+    },
+    {
+      "unique-id": "kafka-messaging-service",
+      "name": "Messaging Service",
+      "node-type": "service",
+      "description": "Apache Kafka Messaging Service",
+      "interfaces": [
+        {
+          "unique-id": "kafka-interface",
+          "bootstrap-servers": "[[ BOOTSTRAP_SERVERS ]]",
+          "topic": "[[ TOPIC ]]"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "unique-id": "messaging-service-choice",
+      "description": "Which messaging service should be used?",
+      "relationship-type": {
+        "options": [
+          {
+            "description": "Use Apache Kafka",
+            "nodes": [
+              "kafka-messaging-service"
+            ],
+            "relationships": [
+              "my-service-to-kafka"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "unique-id": "my-service-to-kafka",
+      "description": "My Service Using Kafka",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "my-service"
+          },
+          "destination": {
+            "node": "kafka-messaging-service"
+          }
+        }
+      }
+    }
+  ]
+}

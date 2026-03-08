@@ -1,0 +1,88 @@
+{
+  "$schema": "https://calm.finos.org/release/1.2/meta/calm.json",
+  "name": "Simple Order System",
+  "description": "Example CALM architecture for demonstrating a Standard.",
+  "nodes": [
+    {
+      "unique-id": "web-frontend",
+      "name": "Web Frontend",
+      "description": "Browser-based user interface.",
+      "node-type": "webclient",
+      "interfaces": [
+        {
+          "unique-id": "frontend-http",
+          "name": "HTTPS Endpoint",
+          "description": "Public web endpoint",
+          "interface-type": "https"
+        }
+      ],
+      "metadata": {
+        "costCenter": "CC-1001",
+        "owner": "Digital Experience Team",
+        "environment": "production"
+      }
+    },
+    {
+      "unique-id": "order-api",
+      "name": "Order API",
+      "description": "Backend service for order processing.",
+      "node-type": "service",
+      "interfaces": [
+        {
+          "unique-id": "order-api-http",
+          "name": "Internal API",
+          "description": "API used by frontend",
+          "interface-type": "https"
+        }
+      ],
+      "metadata": {
+        "costCenter": "CC-2001",
+        "owner": "Order Services Team",
+        "environment": "production"
+      }
+    },
+    {
+      "unique-id": "order-db",
+      "name": "Order Database",
+      "description": "Stores order data.",
+      "node-type": "database",
+      "metadata": {
+        "costCenter": "CC-3001",
+        "owner": "Data Platform Team",
+        "environment": "production"
+      }
+    }
+  ],
+  "relationships": [
+    {
+      "unique-id": "frontend-calls-api",
+      "description": "Frontend calls backend API over HTTPS.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "web-frontend",
+            "interface": "frontend-http"
+          },
+          "destination": {
+            "node": "order-api",
+            "interface": "order-api-http"
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "api-uses-db",
+      "description": "API reads and writes order data.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "order-api"
+          },
+          "destination": {
+            "node": "order-db"
+          }
+        }
+      }
+    }
+  ]
+}

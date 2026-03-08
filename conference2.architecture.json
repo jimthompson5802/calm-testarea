@@ -1,0 +1,125 @@
+{
+  "nodes": [
+    {
+      "unique-id": "frontend",
+      "name": "Web Frontend",
+      "node-type": "webclient",
+      "description": "[[ DESCRIPTION ]]",
+      "interfaces": [
+        {
+          "unique-id": "frontend-url",
+          "url": "[[ URL ]]"
+        }
+      ]
+    },
+    {
+      "unique-id": "api-service",
+      "name": "Registration API",
+      "node-type": "service",
+      "description": "[[ DESCRIPTION ]]",
+      "interfaces": [
+        {
+          "unique-id": "api-image",
+          "image": "[[ IMAGE ]]"
+        },
+        {
+          "unique-id": "api-port",
+          "port": -1
+        }
+      ]
+    },
+    {
+      "unique-id": "postgres-registration-database",
+      "name": "PostgreSQL Database",
+      "node-type": "database",
+      "description": "conference registration database using PostgreSQL",
+      "interfaces": [
+        {
+          "unique-id": "postgres-image",
+          "image": "[[ IMAGE ]]"
+        },
+        {
+          "unique-id": "postgres-port",
+          "port": -1
+        }
+      ]
+    },
+    {
+      "unique-id": "k8s-cluster",
+      "name": "Kubernetes Cluster",
+      "description": "cluster housing the conference sign up api and database services",
+      "node-type": "system"
+    }
+  ],
+  "relationships": [
+    {
+      "unique-id": "database-choice",
+      "description": "Which database technology should be used?",
+      "relationship-type": {
+        "options": [
+          {
+            "description": "Use PostgreSQL",
+            "nodes": [
+              "postgres-registration-database"
+            ],
+            "relationships": [
+              "api-service-to-postgres-database",
+              "deployed-in-k8s-postgres"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "unique-id": "frontend-to-api",
+      "description": "Frontend connects to API service using HTTPS",
+      "protocol": "HTTPS",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "frontend"
+          },
+          "destination": {
+            "node": "api-service"
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "api-service-to-postgres-database",
+      "description": "API service connects to the database using JDBC",
+      "protocol": "JDBC",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "api-service"
+          },
+          "destination": {
+            "node": "postgres-registration-database"
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "deployed-in-k8s-postgres",
+      "description": "k8s with postgres database",
+      "relationship-type": {
+        "deployed-in": {
+          "container": "k8s-cluster",
+          "nodes": [
+            "api-service",
+            "postgres-registration-database"
+          ]
+        }
+      }
+    }
+  ],
+  "metadata": [
+    {
+      "kubernetes": {
+        "namespace": "conference"
+      }
+    }
+  ],
+  "$schema": "https://patterns.company.com/conference-signup.pattern.json"
+}

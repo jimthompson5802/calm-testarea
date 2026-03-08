@@ -1,0 +1,44 @@
+{
+    "$schema": "https://calm.finos.org/release/1.2/meta/calm.json",
+    "unique-id": "simple-messaging-system",
+    "name": "Simple Messaging System",
+    "description": "A basic architecture with a service connected to a message broker",
+    "nodes": [
+        {
+            "unique-id": "my-service",
+            "node-type": "service",
+            "name": "My Service",
+            "description": "Application service that sends messages to the broker"
+        },
+        {
+            "unique-id": "message-broker",
+            "node-type": "service",
+            "name": "Message Broker",
+            "description": "Message broker that receives and processes messages",
+            "interfaces": [
+                {
+                    "unique-id": "messaging-interface",
+                    "port": 5672,
+                    "protocol": "AMQP"
+                }
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "unique-id": "my-service-to-message-broker",
+            "description": "My Service sends messages to the Message Broker via the messaging interface",
+            "relationship-type": {
+                "connects": {
+                    "source": {
+                        "node": "my-service"
+                    },
+                    "destination": {
+                        "node": "message-broker",
+                        "interfaces": ["messaging-interface"]
+                    }
+                }
+            }
+        }
+    ]
+}

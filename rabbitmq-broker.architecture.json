@@ -1,0 +1,51 @@
+{
+  "nodes": [
+    {
+      "unique-id": "my-service",
+      "name": "My Service",
+      "node-type": "service",
+      "description": "[[ DESCRIPTION ]]"
+    },
+    {
+      "unique-id": "message-broker-rabbitmq",
+      "name": "RabbitMQ Message Broker",
+      "node-type": "service",
+      "description": "RabbitMQ message broker for asynchronous messaging"
+    }
+  ],
+  "relationships": [
+    {
+      "unique-id": "broker-choice",
+      "description": "Which message broker should be used?",
+      "relationship-type": {
+        "options": [
+          {
+            "description": "Use RabbitMQ",
+            "nodes": [
+              "message-broker-rabbitmq"
+            ],
+            "relationships": [
+              "my-service-to-rabbitmq"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "unique-id": "my-service-to-rabbitmq",
+      "description": "My Service connects to RabbitMQ using AMQP",
+      "protocol": "AMQP",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "my-service"
+          },
+          "destination": {
+            "node": "message-broker-rabbitmq"
+          }
+        }
+      }
+    }
+  ],
+  "$schema": "https://patterns.example.com/message-broker-pattern.pattern.json"
+}

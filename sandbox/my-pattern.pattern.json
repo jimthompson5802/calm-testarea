@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/patterns/company-base-pattern.json",
+  "title": "Company Base Pattern",
+  "description": "Pattern that enforces the Company Node Standard on all nodes.",
+  "type": "object",
+  "properties": {
+    "nodes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/extended-node"
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "items": {
+        "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship"
+      }
+    }
+  },
+  "$defs": {
+    "extended-node": {
+      "allOf": [
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node"
+        },
+        {
+          "$ref": "https://example.com/standards/company-node-standard.json"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/standards/company-node-standard.json",
+  "title": "Company Node Standard",
+  "description": "Organization-specific requirements for CALM nodes.",
+  "allOf": [
+    {
+      "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "metadata": {
+          "type": "object",
+          "properties": {
+            "costCenter": {
+              "type": "string",
+              "pattern": "^CC-[0-9]{4}$",
+              "description": "Company cost center code"
+            },
+            "owner": {
+              "type": "string",
+              "description": "Owning team or person"
+            },
+            "environment": {
+              "type": "string",
+              "enum": ["development", "staging", "production"],
+              "description": "Deployment environment"
+            }
+          },
+          "required": ["costCenter", "owner", "environment"]
+        }
+      }
+    }
+  ]
+}

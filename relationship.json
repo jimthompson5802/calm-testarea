@@ -1,0 +1,127 @@
+                {
+                    "oneOf": [
+                        {
+                            "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+                            "type": "object",
+                            "properties": {
+                                "unique-id": {
+                                    "const": "rabbitmq-messaging-service"
+                                },
+                                "name": {
+                                    "const": "Messaging Service"
+                                },
+                                "relationship-type": {
+                                    "const": "connects-to"
+                                },
+                                "description": {
+                                    "const": "RabbitMQ Messaging Service"
+                                },
+                                "interfaces": {
+                                    "type": "array",
+                                    "minItems": 1,
+                                    "maxItems": 1,
+                                    "prefixItems": [
+                                        {
+                                            "$ref": "https://calm.finos.org/release/1.2/meta/interface.json#/defs/interface-type",
+                                            "properties": {
+                                                "unique-id": {
+                                                    "const": "rabbitmq-interface"
+                                                },
+                                                "host": {
+                                                    "type": "string"
+                                                },
+                                                "port": {
+                                                    "type": "string"
+                                                },
+                                                "virtual-host": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            "required": ["description"]
+                        },
+                        {
+                            "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+                            "type": "object",
+                            "properties": {
+                                "unique-id": {
+                                    "const": "kafka-messaging-service"
+                                },
+                                "name": {
+                                    "const": "Messaging Service"
+                                },
+                                "relationship-type": {
+                                    "const": "connects-to"
+                                },
+                                "description": {
+                                    "const": "Apache Kafka Messaging Service"
+                                },
+                                "interfaces": {
+                                    "type": "array",
+                                    "minItems": 1,
+                                    "maxItems": 1,
+                                    "prefixItems": [
+                                        {
+                                            "$ref": "https://calm.finos.org/release/1.2/meta/interface.json#/defs/interface-type",
+                                            "properties": {
+                                                "unique-id": {
+                                                    "const": "kafka-interface"
+                                                },
+                                                "bootstrap-servers": {
+                                                    "type": "string"
+                                                },
+                                                "topic": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            "required": ["description"]
+                        },
+                        {
+                            "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+                            "type": "object",
+                            "properties": {
+                                "unique-id": {
+                                    "const": "sqs-messaging-service"
+                                },
+                                "name": {
+                                    "const": "AWS SQS Messaging Service"
+                                },
+                                "relationship-type": {
+                                    "const": "connects-to"
+                                },
+                                "description": {
+                                    "const": "AWS SQS Messaging Service"
+                                },
+                                "interfaces": {
+                                    "type": "array",
+                                    "minItems": 1,
+                                    "maxItems": 1,
+                                    "prefixItems": [
+                                        {
+                                            "$ref": "https://calm.finos.org/release/1.2/meta/interface.json#/defs/interface-type",
+                                            "properties": {
+                                                "unique-id": {
+                                                    "const": "sqs-interface"
+                                                },
+                                                "queue-url": {
+                                                    "type": "string"
+                                                },
+                                                "region": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            "required": ["description"]
+                        }
+                    ]
+                }

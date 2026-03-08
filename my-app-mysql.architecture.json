@@ -1,0 +1,65 @@
+{
+  "nodes": [
+    {
+      "unique-id": "application-service",
+      "name": "Application Service",
+      "node-type": "service",
+      "description": "[[ DESCRIPTION ]]",
+      "interfaces": [
+        {
+          "unique-id": "app-api",
+          "host": "[[ HOST ]]",
+          "port": -1
+        }
+      ]
+    },
+    {
+      "unique-id": "mysql-database",
+      "name": "MySQL Database",
+      "node-type": "database",
+      "description": "MySQL relational database",
+      "interfaces": [
+        {
+          "unique-id": "mysql-connection",
+          "host": "[[ HOST ]]",
+          "port": 3306
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "unique-id": "database-choice",
+      "description": "Which database should the application use?",
+      "relationship-type": {
+        "options": [
+          {
+            "description": "Use MySQL",
+            "nodes": [
+              "mysql-database"
+            ],
+            "relationships": [
+              "app-to-mysql"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "unique-id": "app-to-mysql",
+      "description": "Application connects to MySQL database",
+      "protocol": "JDBC",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "application-service"
+          },
+          "destination": {
+            "node": "mysql-database"
+          }
+        }
+      }
+    }
+  ],
+  "$schema": "https://example.com/patterns/app-with-database.pattern.json"
+}

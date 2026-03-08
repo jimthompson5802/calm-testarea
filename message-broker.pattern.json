@@ -1,0 +1,200 @@
+{
+    "$schema": "https://calm.finos.org/release/1.2/meta/calm.json",
+    "$id": "https://patterns.example.com/message-broker-pattern.pattern.json",
+    "title": "Service with Message Broker Pattern",
+    "description": "A reusable pattern for a service connecting to a message broker (RabbitMQ or Kafka)",
+    "type": "object",
+    "properties": {
+        "nodes": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "prefixItems": [
+                {
+                    "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node",
+                    "type": "object",
+                    "properties": {
+                        "unique-id": {
+                            "const": "my-service"
+                        },
+                        "name": {
+                            "const": "My Service"
+                        },
+                        "node-type": {
+                            "const": "service"
+                        },
+                        "description": {
+                            "type": "string"
+                        }
+                    },
+                    "required": ["description"]
+                },
+                {
+                    "oneOf": [
+                        {
+                            "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node",
+                            "type": "object",
+                            "properties": {
+                                "unique-id": {
+                                    "const": "message-broker-rabbitmq"
+                                },
+                                "name": {
+                                    "const": "RabbitMQ Message Broker"
+                                },
+                                "node-type": {
+                                    "const": "service"
+                                },
+                                "description": {
+                                    "const": "RabbitMQ message broker for asynchronous messaging"
+                                }
+                            }
+                        },
+                        {
+                            "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node",
+                            "type": "object",
+                            "properties": {
+                                "unique-id": {
+                                    "const": "message-broker-kafka"
+                                },
+                                "name": {
+                                    "const": "Kafka Message Broker"
+                                },
+                                "node-type": {
+                                    "const": "service"
+                                },
+                                "description": {
+                                    "const": "Apache Kafka message broker for event streaming"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "relationships": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "prefixItems": [
+                {
+                    "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+                    "type": "object",
+                    "properties": {
+                        "unique-id": {
+                            "const": "broker-choice"
+                        },
+                        "description": {
+                            "const": "Which message broker should be used?"
+                        },
+                        "relationship-type": {
+                            "type": "object",
+                            "properties": {
+                                "options": {
+                                    "type": "array",
+                                    "prefixItems": [
+                                        {
+                                            "oneOf": [
+                                                {
+                                                    "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/decision",
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "description": {
+                                                            "const": "Use RabbitMQ"
+                                                        },
+                                                        "nodes": {
+                                                            "const": ["message-broker-rabbitmq"]
+                                                        },
+                                                        "relationships": {
+                                                            "const": ["my-service-to-rabbitmq"]
+                                                        }
+                                                    }
+                                                },
+                                                {
+                                                    "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/decision",
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "description": {
+                                                            "const": "Use Kafka"
+                                                        },
+                                                        "nodes": {
+                                                            "const": ["message-broker-kafka"]
+                                                        },
+                                                        "relationships": {
+                                                            "const": ["my-service-to-kafka"]
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "oneOf": [
+                        {
+                            "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+                            "type": "object",
+                            "properties": {
+                                "unique-id": {
+                                    "const": "my-service-to-rabbitmq"
+                                },
+                                "description": {
+                                    "const": "My Service connects to RabbitMQ using AMQP"
+                                },
+                                "protocol": {
+                                    "const": "AMQP"
+                                },
+                                "relationship-type": {
+                                    "const": {
+                                        "connects": {
+                                            "source": {
+                                                "node": "my-service"
+                                            },
+                                            "destination": {
+                                                "node": "message-broker-rabbitmq"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+                            "type": "object",
+                            "properties": {
+                                "unique-id": {
+                                    "const": "my-service-to-kafka"
+                                },
+                                "description": {
+                                    "const": "My Service connects to Kafka using TCP"
+                                },
+                                "protocol": {
+                                    "const": "TCP"
+                                },
+                                "relationship-type": {
+                                    "const": {
+                                        "connects": {
+                                            "source": {
+                                                "node": "my-service"
+                                            },
+                                            "destination": {
+                                                "node": "message-broker-kafka"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "required": [
+        "nodes",
+        "relationships"
+    ]
+}

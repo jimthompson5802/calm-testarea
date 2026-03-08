@@ -1,0 +1,18 @@
+{
+    "$schema": "https://calm.finos.org/release/1.2/meta/control.json",
+    "unique-id": "encryption-in-transit",
+    "name": "Encryption in Transit",
+    "description": "This control ensures that all data is encrypted while in transit between components.",
+    "severity": "high",
+    "family": "data-protection",
+    "framework": "NIST-800-53",
+    "control-id": "SC-8",
+    "requirements": [
+        {
+            "unique-id": "requirement-1",
+            "name": "Use of TLS",
+            "description": "All external communication must use TLS 1.2 or higher.",
+            "standard": "https://datatracker.ietf.org/doc/html/rfc8446"
+        }
+    ]
+}

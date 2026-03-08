@@ -1,0 +1,170 @@
+{
+  "nodes": [
+    {
+      "unique-id": "frontend",
+      "name": "Web Frontend",
+      "node-type": "webclient",
+      "description": "[[ DESCRIPTION ]]",
+      "interfaces": [
+        {
+          "unique-id": "frontend-url",
+          "url": "[[ URL ]]"
+        }
+      ]
+    },
+    {
+      "unique-id": "backend-service",
+      "name": "Backend Service",
+      "node-type": "service",
+      "description": "[[ DESCRIPTION ]]",
+      "interfaces": [
+        {
+          "unique-id": "backend-api",
+          "api-port": -1
+        }
+      ]
+    },
+    {
+      "unique-id": "mysql-backend-database",
+      "name": "MySQL Database",
+      "node-type": "database",
+      "description": "conference backend database using MySQL",
+      "interfaces": [
+        {
+          "unique-id": "mysql-image",
+          "mysql-port": -1
+        }
+      ]
+    },
+    {
+      "unique-id": "message-broker-kafka",
+      "name": "Kafka Message Broker",
+      "node-type": "service",
+      "description": "Apache Kafka message broker for event streaming"
+    },
+    {
+      "unique-id": "k8s-cluster",
+      "name": "Kubernetes Cluster",
+      "description": "cluster housing the conference signup services, database, and message broker",
+      "node-type": "system"
+    }
+  ],
+  "relationships": [
+    {
+      "unique-id": "database-choice",
+      "description": "Which database technology should be used?",
+      "relationship-type": {
+        "options": [
+          {
+            "description": "Use MySQL",
+            "nodes": [
+              "mysql-backend-database"
+            ],
+            "relationships": [
+              "backend-service-to-mysql-database"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "unique-id": "broker-choice",
+      "description": "Which message broker should be used?",
+      "relationship-type": {
+        "options": [
+          {
+            "description": "Use Kafka",
+            "nodes": [
+              "message-broker-kafka"
+            ],
+            "relationships": [
+              "backend-service-to-kafka"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "unique-id": "deployment-config",
+      "description": "Which deployment configuration should be used?",
+      "relationship-type": {
+        "options": [
+          {
+            "description": "Deploy MySQL with Kafka on Kubernetes",
+            "nodes": [],
+            "relationships": [
+              "deployed-in-k8s-mysql-kafka"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "unique-id": "frontend-to-backend",
+      "description": "Frontend connects to Backend Service using HTTPS",
+      "protocol": "HTTPS",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "frontend"
+          },
+          "destination": {
+            "node": "backend-service"
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "backend-service-to-mysql-database",
+      "description": "Backend Service connects to MySQL database using JDBC",
+      "protocol": "JDBC",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "backend-service"
+          },
+          "destination": {
+            "node": "mysql-backend-database"
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "backend-service-to-kafka",
+      "description": "Backend Service connects to Kafka using TCP",
+      "protocol": "TCP",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "backend-service"
+          },
+          "destination": {
+            "node": "message-broker-kafka"
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "deployed-in-k8s-mysql-kafka",
+      "description": "Kubernetes deployment with MySQL and Kafka",
+      "relationship-type": {
+        "deployed-in": {
+          "container": "k8s-cluster",
+          "nodes": [
+            "backend-service",
+            "mysql-backend-database",
+            "message-broker-kafka"
+          ]
+        }
+      }
+    }
+  ],
+  "metadata": [
+    {
+      "kubernetes": {
+        "namespace": "conference"
+      }
+    }
+  ],
+  "$schema": "https://patterns.company.com/conference-with-messaging.pattern.json"
+}

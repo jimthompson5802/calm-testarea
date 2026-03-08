@@ -1,0 +1,495 @@
+{
+    "$schema": "https://calm.finos.org/release/1.2/meta/calm.json",
+    "$id": "https://patterns.company.com/conference-with-messaging.pattern.json",
+    "title": "Conference Signup with Message Broker Pattern",
+    "description": "A reusable architecture pattern for conference signup systems with message broker integration, deployed on Kubernetes",
+    "type": "object",
+    "properties": {
+        "nodes": {
+            "type": "array",
+            "minItems": 5,
+            "maxItems": 5,
+            "prefixItems": [
+                {
+                    "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node",
+                    "type": "object",
+                    "properties": {
+                        "unique-id": {"const": "frontend"},
+                        "name": {"const": "Web Frontend"},
+                        "node-type": {"const": "webclient"},
+                        "description": {"type": "string"},
+                        "interfaces": {
+                            "type": "array",
+                            "minItems": 1,
+                            "maxItems": 1,
+                            "prefixItems": [
+                                {
+                                    "$ref": "https://calm.finos.org/release/1.2/meta/interface.json#/defs/interface-type",
+                                    "properties": {
+                                        "unique-id": {"const": "frontend-url"},
+                                        "url": {"type": "string"}
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "required": ["description"]
+                },
+                {
+                    "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node",
+                    "type": "object",
+                    "properties": {
+                        "unique-id": {"const": "backend-service"},
+                        "name": {"const": "Backend Service"},
+                        "node-type": {"const": "service"},
+                        "description": {"type": "string"},
+                        "interfaces": {
+                            "type": "array",
+                            "minItems": 1,
+                            "maxItems": 1,
+                            "prefixItems": [
+                                {
+                                    "$ref": "https://calm.finos.org/release/1.2/meta/interface.json#/defs/interface-type",
+                                    "properties": {
+                                        "unique-id": {"const": "backend-api"},
+                                        "api-port": {"type": "integer"}
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "required": ["description"]
+                },
+                {
+                    "oneOf": [
+                        {
+                            "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node",
+                            "type": "object",
+                            "properties": {
+                                "unique-id": {"const": "postgres-backend-database"},
+                                "name": {"const": "PostgreSQL Database"},
+                                "node-type": {"const": "database"},
+                                "description": {"const": "conference backend database using PostgreSQL"},
+                                "interfaces": {
+                                    "type": "array",
+                                    "minItems": 1,
+                                    "maxItems": 1,
+                                    "prefixItems": [
+                                        {
+                                            "$ref": "https://calm.finos.org/release/1.2/meta/interface.json#/defs/interface-type",
+                                            "properties": {
+                                                "unique-id": {"const": "postgres-image"},
+                                                "postgres-port": {"type": "integer"}
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node",
+                            "type": "object",
+                            "properties": {
+                                "unique-id": {"const": "mysql-backend-database"},
+                                "name": {"const": "MySQL Database"},
+                                "node-type": {"const": "database"},
+                                "description": {"const": "conference backend database using MySQL"},
+                                "interfaces": {
+                                    "type": "array",
+                                    "minItems": 1,
+                                    "maxItems": 1,
+                                    "prefixItems": [
+                                        {
+                                            "$ref": "https://calm.finos.org/release/1.2/meta/interface.json#/defs/interface-type",
+                                            "properties": {
+                                                "unique-id": {"const": "mysql-image"},
+                                                "mysql-port": {"type": "integer"}
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "oneOf": [
+                        {
+                            "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node",
+                            "type": "object",
+                            "properties": {
+                                "unique-id": {"const": "message-broker-rabbitmq"},
+                                "name": {"const": "RabbitMQ Message Broker"},
+                                "node-type": {"const": "service"},
+                                "description": {"const": "RabbitMQ message broker for asynchronous messaging"}
+                            }
+                        },
+                        {
+                            "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node",
+                            "type": "object",
+                            "properties": {
+                                "unique-id": {"const": "message-broker-kafka"},
+                                "name": {"const": "Kafka Message Broker"},
+                                "node-type": {"const": "service"},
+                                "description": {"const": "Apache Kafka message broker for event streaming"}
+                            }
+                        }
+                    ]
+                },
+                {
+                    "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node",
+                    "type": "object",
+                    "properties": {
+                        "unique-id": {"const": "k8s-cluster"},
+                        "name": {"const": "Kubernetes Cluster"},
+                        "description": {"const": "cluster housing the conference signup services, database, and message broker"},
+                        "node-type": {"const": "system"}
+                    }
+                }
+            ]
+        },
+        "relationships": {
+            "type": "array",
+            "minItems": 7,
+            "maxItems": 7,
+            "prefixItems": [
+                {
+                    "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+                    "type": "object",
+                    "properties": {
+                        "unique-id": {"const": "database-choice"},
+                        "description": {"const": "Which database technology should be used?"},
+                        "relationship-type": {
+                            "type": "object",
+                            "properties": {
+                                "options": {
+                                    "type": "array",
+                                    "prefixItems": [
+                                        {
+                                            "oneOf": [
+                                                {
+                                                    "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/decision",
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "description": {"const": "Use PostgreSQL"},
+                                                        "nodes": {"const": ["postgres-backend-database"]},
+                                                        "relationships": {"const": ["backend-service-to-postgres-database"]}
+                                                    }
+                                                },
+                                                {
+                                                    "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/decision",
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "description": {"const": "Use MySQL"},
+                                                        "nodes": {"const": ["mysql-backend-database"]},
+                                                        "relationships": {"const": ["backend-service-to-mysql-database"]}
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+                    "type": "object",
+                    "properties": {
+                        "unique-id": {"const": "broker-choice"},
+                        "description": {"const": "Which message broker should be used?"},
+                        "relationship-type": {
+                            "type": "object",
+                            "properties": {
+                                "options": {
+                                    "type": "array",
+                                    "prefixItems": [
+                                        {
+                                            "oneOf": [
+                                                {
+                                                    "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/decision",
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "description": {"const": "Use RabbitMQ"},
+                                                        "nodes": {"const": ["message-broker-rabbitmq"]},
+                                                        "relationships": {"const": ["backend-service-to-rabbitmq"]}
+                                                    }
+                                                },
+                                                {
+                                                    "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/decision",
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "description": {"const": "Use Kafka"},
+                                                        "nodes": {"const": ["message-broker-kafka"]},
+                                                        "relationships": {"const": ["backend-service-to-kafka"]}
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+                    "type": "object",
+                    "properties": {                        
+                        "unique-id": {"const": "deployment-config"},
+                        "description": {"const": "Which deployment configuration should be used?"},
+                        "relationship-type": {
+                            "type": "object",
+                            "properties": {
+                                "options": {
+                                    "type": "array",
+                                    "prefixItems": [
+                                        {
+                                            "oneOf": [
+                                                {
+                                                    "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/decision",
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "description": {"const": "Deploy PostgreSQL with RabbitMQ on Kubernetes"},
+                                                        "nodes": {"const": []},
+                                                        "relationships": {"const": ["deployed-in-k8s-postgres-rabbitmq"]}
+                                                    }
+                                                },
+                                                {
+                                                    "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/decision",
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "description": {"const": "Deploy PostgreSQL with Kafka on Kubernetes"},
+                                                        "nodes": {"const": []},
+                                                        "relationships": {"const": ["deployed-in-k8s-postgres-kafka"]}
+                                                    }
+                                                },
+                                                {
+                                                    "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/decision",
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "description": {"const": "Deploy MySQL with RabbitMQ on Kubernetes"},
+                                                        "nodes": {"const": []},
+                                                        "relationships": {"const": ["deployed-in-k8s-mysql-rabbitmq"]}
+                                                    }
+                                                },
+                                                {
+                                                    "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/decision",
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "description": {"const": "Deploy MySQL with Kafka on Kubernetes"},
+                                                        "nodes": {"const": []},
+                                                        "relationships": {"const": ["deployed-in-k8s-mysql-kafka"]}
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+                    "type": "object",
+                    "properties": {                        
+                        "unique-id": {"const": "frontend-to-backend"},
+                        "description": {"const": "Frontend connects to Backend Service using HTTPS"},
+                        "protocol": {"const": "HTTPS"},
+                        "relationship-type": {
+                            "const": {
+                                "connects": {
+                                    "source": {"node": "frontend"},
+                                    "destination": {"node": "backend-service"}
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "oneOf": [
+                        {
+                            "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+                            "type": "object",
+                            "properties": {
+                                "unique-id": {"const": "backend-service-to-postgres-database"},
+                                "description": {"const": "Backend Service connects to PostgreSQL database using JDBC"},
+                                "protocol": {"const": "JDBC"},
+                                "relationship-type": {
+                                    "const": {
+                                        "connects": {
+                                            "source": {"node": "backend-service"},
+                                            "destination": {"node": "postgres-backend-database"}
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+                            "type": "object",
+                            "properties": {
+                                "unique-id": {"const": "backend-service-to-mysql-database"},
+                                "description": {"const": "Backend Service connects to MySQL database using JDBC"},
+                                "protocol": {"const": "JDBC"},
+                                "relationship-type": {
+                                    "const": {
+                                        "connects": {
+                                            "source": {"node": "backend-service"},
+                                            "destination": {"node": "mysql-backend-database"}
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "oneOf": [
+                        {
+                            "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+                            "type": "object",
+                            "properties": {
+                                "unique-id": {"const": "backend-service-to-rabbitmq"},
+                                "description": {"const": "Backend Service connects to RabbitMQ using AMQP"},
+                                "protocol": {"const": "AMQP"},
+                                "relationship-type": {
+                                    "const": {
+                                        "connects": {
+                                            "source": {"node": "backend-service"},
+                                            "destination": {"node": "message-broker-rabbitmq"}
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+                            "type": "object",
+                            "properties": {
+                                "unique-id": {"const": "backend-service-to-kafka"},
+                                "description": {"const": "Backend Service connects to Kafka using TCP"},
+                                "protocol": {"const": "TCP"},
+                                "relationship-type": {
+                                    "const": {
+                                        "connects": {
+                                            "source": {"node": "backend-service"},
+                                            "destination": {"node": "message-broker-kafka"}
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "oneOf": [
+                        {
+                            "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+                            "properties": {
+                                "unique-id": {"const": "deployed-in-k8s-postgres-rabbitmq"},
+                                "description": {"const": "Kubernetes deployment with PostgreSQL and RabbitMQ"},
+                                "relationship-type": {
+                                    "const": {
+                                        "deployed-in": {
+                                            "container": "k8s-cluster",
+                                            "nodes": [
+                                                "backend-service",
+                                                "postgres-backend-database",
+                                                "message-broker-rabbitmq"
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+                            "properties": {
+                                "unique-id": {"const": "deployed-in-k8s-postgres-kafka"},
+                                "description": {"const": "Kubernetes deployment with PostgreSQL and Kafka"},
+                                "relationship-type": {
+                                    "const": {
+                                        "deployed-in": {
+                                            "container": "k8s-cluster",
+                                            "nodes": [
+                                                "backend-service",
+                                                "postgres-backend-database",
+                                                "message-broker-kafka"
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+                            "properties": {
+                                "unique-id": {"const": "deployed-in-k8s-mysql-rabbitmq"},
+                                "description": {"const": "Kubernetes deployment with MySQL and RabbitMQ"},
+                                "relationship-type": {
+                                    "const": {
+                                        "deployed-in": {
+                                            "container": "k8s-cluster",
+                                            "nodes": [
+                                                "backend-service",
+                                                "mysql-backend-database",
+                                                "message-broker-rabbitmq"
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+                            "properties": {
+                                "unique-id": {"const": "deployed-in-k8s-mysql-kafka"},
+                                "description": {"const": "Kubernetes deployment with MySQL and Kafka"},
+                                "relationship-type": {
+                                    "const": {
+                                        "deployed-in": {
+                                            "container": "k8s-cluster",
+                                            "nodes": [
+                                                "backend-service",
+                                                "mysql-backend-database",
+                                                "message-broker-kafka"
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "metadata": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1,
+            "prefixItems": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "kubernetes": {
+                            "type": "object",
+                            "properties": {
+                                "namespace": {"const": "conference"}
+                            },
+                            "required": ["namespace"]
+                        }
+                    },
+                    "required": ["kubernetes"]
+                }
+            ]
+        }
+    },
+    "required": [
+        "nodes",
+        "relationships",
+        "metadata"
+    ]
+}

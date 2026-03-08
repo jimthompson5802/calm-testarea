@@ -25,7 +25,7 @@
           "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node"
         },
         {
-          "$ref": "https://raw.githubusercontent.com/jimthompson5802/calm-testarea/refs/heads/main/architecture-pattern-sandard/company.standard.json"
+          "$ref": "https://raw.githubusercontent.com/jimthompson5802/calm-testarea/refs/heads/main/architecture-validation/company.standard.json"
         }
       ]
     }

@@ -35,7 +35,7 @@ Generated Docusaurus documentation sites that visualize the architectures as sta
 ### Chat Logs (`chat_logs/`)
 GitHub Copilot chat logs documenting pattern creation, refinement, and summarization sessions showing the iterative design process.
 
-### Architecture Pattern Standard (`architecture-pattern-sandard/`)
+### Architecture Validation (`architecture-validation/`)
 Experimental and test files:
 - `company.standard.json`: Company-specific standards
 - `my-app.architecture.json`: Test architecture

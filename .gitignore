@@ -56,3 +56,7 @@ coverage/
 .DS_Store
 .vscode/
 .idea/
+
+# documentation
+docs/html/
+docs/html2/

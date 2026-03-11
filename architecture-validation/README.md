@@ -175,7 +175,15 @@ calm validate --architecture my-app-non-standard-compliant.architecture.json --p
 ```
 
 ```
- ERROR json-schema: must have required property 'owner'
+info [calm-validate]:     Formatting output as pretty
+Summary
+- Errors: yes (6)
+- Warnings: no (0)
+- Info/Hints: 0
+
+ERROR issues:
+- In my-app-non-standard-compliant.architecture.json (/Users/jim/Desktop/calm-demos/calm-testarea/architecture-validation/my-app-non-standard-compliant.architecture.json):
+  ERROR json-schema: must have required property 'owner'
     path: /nodes/web-frontend/metadata
     at line 19, col 19 (/Users/jim/Desktop/calm-demos/calm-testarea/architecture-validation/my-app-non-standard-compliant.architecture.json)
     schema: #/allOf/1/properties/metadata/required
@@ -187,10 +195,28 @@ calm validate --architecture my-app-non-standard-compliant.architecture.json --p
     schema: #/allOf/1/properties/metadata/properties/costCenter/pattern
     38 |         "costCenter": "COST-2001",
        |                       ^^^^^^^^^^^
+  ERROR json-schema: must have required property 'metadata'
+    path: /nodes/sell-api
+    at line 43, col 5 (/Users/jim/Desktop/calm-demos/calm-testarea/architecture-validation/my-app-non-standard-compliant.architecture.json)
+    schema: #/allOf/1/required
+    43 |     {
+       |     ^
   ERROR json-schema: must be equal to one of the allowed values (expected one of ["development","staging","production"])
     path: /nodes/order-db/metadata/environment
-    at line 51, col 24 (/Users/jim/Desktop/calm-demos/calm-testarea/architecture-validation/my-app-non-standard-compliant.architecture.json)
+    at line 65, col 24 (/Users/jim/Desktop/calm-demos/calm-testarea/architecture-validation/my-app-non-standard-compliant.architecture.json)
     schema: #/allOf/1/properties/metadata/properties/environment/enum
-    51 |         "environment": "prod"
+    65 |         "environment": "prod"
        |                        ^^^^^^
+  ERROR json-schema: must have required property 'backupPolicy'
+    path: /nodes/order-db/metadata
+    at line 62, col 19 (/Users/jim/Desktop/calm-demos/calm-testarea/architecture-validation/my-app-non-standard-compliant.architecture.json)
+    schema: #/allOf/2/then/properties/metadata/required
+    62 |       "metadata": {
+       |                   ^
+  ERROR json-schema: must match "then" schema
+    path: /nodes/order-db
+    at line 57, col 5 (/Users/jim/Desktop/calm-demos/calm-testarea/architecture-validation/my-app-non-standard-compliant.architecture.json)
+    schema: #/allOf/2/if
+    57 |     {
+       |     ^^
 ```

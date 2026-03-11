@@ -41,6 +41,20 @@
       }
     },
     {
+      "unique-id": "sell-api",
+      "name": "Sell API",
+      "description": "Backend service for sales processing.",
+      "node-type": "service",
+      "interfaces": [
+        {
+          "unique-id": "sell-api-http",
+          "name": "Sell API Endpoint",
+          "description": "API for sales operations",
+          "interface-type": "https"
+        }
+      ]
+    },
+    {
       "unique-id": "order-db",
       "name": "Order Database",
       "description": "Stores order data.",
@@ -76,6 +90,20 @@
         "connects": {
           "source": {
             "node": "order-api"
+          },
+          "destination": {
+            "node": "order-db"
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "sell-api-uses-db",
+      "description": "Sell API reads and writes order data.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "sell-api"
           },
           "destination": {
             "node": "order-db"

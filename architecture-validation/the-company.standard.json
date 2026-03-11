@@ -26,10 +26,33 @@
               "type": "string",
               "enum": ["development", "staging", "production"],
               "description": "Deployment environment"
+            },
+            "backupPolicy": {
+              "type": "string",
+              "description": "Backup policy for database nodes"
             }
           },
           "required": ["costCenter", "owner", "environment"]
         }
+      },
+      "required": ["metadata"]
+    },
+    {
+      "if": {
+        "properties": {
+          "node-type": {
+            "const": "database"
+          }
+        },
+        "required": ["node-type"]
+      },
+      "then": {
+        "properties": {
+          "metadata": {
+            "required": ["backupPolicy"]
+          }
+        },
+        "required": ["metadata"]
       }
     }
   ]

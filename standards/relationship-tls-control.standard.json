@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://fhlmc.com/standards/relationship-tls-control.standard.json",
+  "$id": "https://example.com/standards/relationship-tls-control.standard.json",
   "title": "Relationship TLS Control Standard",
   "description": "Validates TLS configuration for relationship-level controls. If config includes tls-version/iana-name, enforces allowed TLS versions and version-appropriate IANA cipher suite names.",
   "allOf": [

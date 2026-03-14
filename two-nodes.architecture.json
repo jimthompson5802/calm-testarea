@@ -1,0 +1,54 @@
+{
+    "$schema": "https://calm.finos.org/release/1.2/meta/calm.json",
+    "unique-id": "two-node-system",
+    "name": "Two Node System",
+    "description": "A simple architecture with two nodes connected by a connects relationship",
+    "nodes": [
+        {
+            "unique-id": "api-service",
+            "node-type": "service",
+            "name": "API Service",
+            "description": "Backend API service"
+        },
+        {
+            "unique-id": "database",
+            "node-type": "database",
+            "name": "Database",
+            "description": "Data persistence layer"
+        }
+    ],
+    "relationships": [
+        {
+            "unique-id": "api-to-database",
+            "description": "API Service connects to Database",
+            "relationship-type": {
+                "connects": {
+                    "source": {
+                        "node": "api-service"
+                    },
+                    "destination": {
+                        "node": "database"
+                    }
+                }
+            },
+            "controls": {
+                "secure-database-connection": {
+                    "unique-id": "secure-database-connection",
+                    "description": "Ensures secure TLS encrypted connection between API service and database",
+                    "requirements": [
+                        {
+                            "unique-id": "tls-requirement",
+                            "name": "TLS Encryption Requirement",
+                            "description": "Database connections must use TLS encryption with minimum version 1.2",
+                            "requirement-url": "https://datatracker.ietf.org/doc/html/rfc8446",
+                            "config": {
+                                "tls-version": "1.3",
+                                "iana-name": "TLS_CHACHA20_POLY1305_SHA256"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}

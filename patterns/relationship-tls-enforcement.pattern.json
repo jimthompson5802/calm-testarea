@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fhlmc.com/patterns/relationship-tls-enforcement.pattern.json",
+  "title": "Relationship TLS Enforcement Pattern",
+  "description": "Applies the Relationship TLS Control Standard to all relationships in a CALM architecture.",
+  "type": "object",
+  "properties": {
+    "nodes": {
+      "type": "array",
+      "items": {
+        "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node"
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/extended-relationship"
+      }
+    }
+  },
+  "$defs": {
+    "extended-relationship": {
+      "allOf": [
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship"
+        },
+        {
+          "$ref": "https://fhlmc.com/standards/relationship-tls-control.standard.json"
+        }
+      ]
+    }
+  }
+}

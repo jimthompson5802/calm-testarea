@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fhlmc.com/standards/relationship-tls-control.standard.json",
+  "title": "Relationship TLS Control Standard",
+  "description": "Validates TLS configuration for relationship-level controls. If config includes tls-version/iana-name, enforces allowed TLS versions and version-appropriate IANA cipher suite names.",
+  "allOf": [
+    {
+      "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "controls": {
+          "type": "object",
+          "patternProperties": {
+            "^[a-zA-Z0-9-]+$": {
+              "type": "object",
+              "properties": {
+                "requirements": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "config": {
+                        "$ref": "#/$defs/tlsConfigWhenPresent"
+                      }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  ],
+  "$defs": {
+    "tlsConfigWhenPresent": {
+      "type": "object",
+      "additionalProperties": true,
+      "allOf": [
+        {
+          "if": {
+            "anyOf": [
+              { "required": ["tls-version"] },
+              { "required": ["iana-name"] }
+            ]
+          },
+          "then": { "$ref": "#/$defs/tlsConfig" }
+        }
+      ]
+    },
+    "tlsConfig": {
+      "type": "object",
+      "properties": {
+        "tls-version": {
+          "type": "string",
+          "enum": ["1.2", "1.3"],
+          "description": "TLS protocol version."
+        },
+        "iana-name": {
+          "type": "string",
+          "description": "IANA-registered cipher suite name; valid values depend on tls-version."
+        }
+      },
+      "required": ["tls-version", "iana-name"],
+      "additionalProperties": true,
+      "oneOf": [
+        {
+          "properties": {
+            "tls-version": { "const": "1.2" },
+            "iana-name": {
+              "enum": [
+                "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
+                "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+                "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
+                "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384"
+              ]
+            }
+          },
+          "required": ["tls-version", "iana-name"]
+        },
+        {
+          "properties": {
+            "tls-version": { "const": "1.3" },
+            "iana-name": {
+              "enum": [
+                "TLS_AES_128_GCM_SHA256",
+                "TLS_AES_256_GCM_SHA384",
+                "TLS_CHACHA20_POLY1305_SHA256",
+                "TLS_AES_128_CCM_SHA256",
+                "TLS_AES_128_CCM_8_SHA256"
+              ]
+            }
+          },
+          "required": ["tls-version", "iana-name"]
+        }
+      ]
+    }
+  }
+}
